@@ -10,29 +10,33 @@
 
         $(document).ready(function() {
 
-            var customerViewModel = function() {
+            var employeeViewModel = function() {
             var self = this;
             self.firstName = ko.observable("");
             self.lastName = ko.observable("");
             self.emailId = ko.observable("");
+            self.salary = ko.observable("");
+            self.occupation = ko.observable("");
             self.searchKey = ko.observable("");
 
-            self.getCustomerDetails = function () {              
+            self.getEmployeeDetails = function () {              
                 $.ajax({
-                    url: 'YOUR GET API URL HERE',
+                    url: 'https://wep1y15q53.execute-api.us-east-2.amazonaws.com/dev/getdetails',
                     cache: false,
                     type: 'GET',                   
-                    data: { "EmailID": self.searchKey() },
+                    data: { "Email": self.searchKey() },
                     success: function (data) {              
                         self.firstName(data.Item.FirstName)
                         self.lastName(data.Item.LastName),
-                        self.emailId(data.Item.EmailID)
+                        self.salary(data.Item.Salary),
+                        self.occupation(data.Item.Occupation),
+                        self.emailId(data.Item.Email)
                     }
                 });
             }
         }
 
-            var viewModel = new customerViewModel();
+            var viewModel = new employeeViewModel();
             ko.applyBindings(viewModel);
          });
 
@@ -42,14 +46,14 @@
 <body>
     <table>
         <tr>
-            <td>Search Key(EmailID):</td>
+            <td>Search Key(Email):</td>
             <td><input type="text" id="txtSearchKey" data-bind="value : searchKey"/></td>
         </tr>
     </table>
 
     <br />
   
-    <table id="CustomerDetails">
+    <table id="EmployeeDetails">
         <thead>
             <tr>
                 <td>First Name:</td>
@@ -64,7 +68,14 @@
                 <td>Email:</td>
                 <td><label id="emailId" data-bind="text: emailId"/></td>
             </tr>
-          
+            <tr>
+                <td>Salary:</td>
+                <td><label id="salary" data-bind="text: salary"/></td>
+            </tr>
+            <tr>
+                <td>Occupation:</td>
+                <td><label id="occupation" data-bind="text: occupation"/></td>
+            </tr>          
         </thead>
       
         </table>
@@ -73,7 +84,7 @@
   
   <table>
 <tr>
-    <td><input type="button" value="GetCustomerDetails" data-bind="click: $root.getCustomerDetails()"/></td>
+    <td><input type="button" value="GetEmployeeDetails" data-bind="click: $root.getEmployeeDetails()"/></td>
 </tr>
   </table>
 </body>
